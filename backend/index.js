@@ -3,34 +3,38 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 
-// ✅ Correct import paths based on your files
 import feedbackRoutes from "./routes/feedbackRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js" 
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// ✅ Setup CORS properly to allow frontend domain
+app.use(
+  cors({
+    origin: ["http://localhost:5173"], // add frontend origin(s)
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
-// Route setup
+// Routes
 app.use("/feedback", feedbackRoutes);
-app.use("/admin", adminRoutes)
+app.use("/admin", adminRoutes);
 
-// DB Connection
+// Test route
+app.get("/", (req, res) => {
+  res.send("Backend is working");
+});
+
+// MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(PORT, () =>
-      console.log(`Server running on port ${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.log("DB Error:", err.message));
-
-
-  app.get("/", (req, res) => {
-  res.send("Backend is working");
-});
