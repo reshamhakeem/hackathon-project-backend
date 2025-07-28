@@ -15,9 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "https://your-frontend.netlify.app", // Replace with real frontend Netlify link
-      "https://hackathon-project-frontend.netlify.app" // If known
+      "http://localhost:5173"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
